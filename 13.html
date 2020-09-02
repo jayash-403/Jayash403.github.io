@@ -1,0 +1,155 @@
+<script src="https://www.dukelearntoprogram.com/course1/common/js/image/SimpleImage.js" >
+</script>
+
+<h1>Filter Fun</h1>
+
+<canvas id="theCanvas">
+</canvas>
+
+<h2>Load Image</h2>
+
+<input type="file" multiple="false" accept="image/*" id="fileInput" onchange="loadImage()" >
+
+<h2>Choose Filter</h2>
+
+<p>
+<input type="button" value="Grayscale" onclick="doGray()" >
+<input type="button" value="Red" onclick="doRed()" >
+<input type="button" value="Blue" onclick="doblue()">
+<input type="button" value="Green" onclick="dogreen()">
+</p>
+
+<p>
+<input type="button" value="Reset Image" onclick="reset()" >
+</p>
+
+
+
+<style>
+
+  body {
+    background-color: rgb(0,175,255);
+    margin: 30pt;
+  }
+
+  canvas {
+    border: 1pt solid dimgray;
+    text-align: center;
+    height: 200px;
+  }
+
+  input {
+    font-size: 12pt;
+  }
+</style>
+
+
+
+<script>
+  var originalImage = null;
+var grayImage = null;
+var redImage = null;
+var canvas = document.getElementById("theCanvas");
+
+function loadImage() {
+  var file = document.getElementById("fileInput");
+  originalImage = new SimpleImage(file);
+  grayImage = new SimpleImage(file);
+  blueImage = new SimpleImage(file);
+  redImage = new SimpleImage(file);
+  greenImage  = new SimpleImage(file);
+  originalImage.drawTo(canvas);
+}
+
+function doGray() {
+  if (imageIsLoaded(grayImage)) {
+    filterGray();
+    grayImage.drawTo(canvas);
+  }
+}
+
+function filterGray() {
+  for (var pixel of grayImage.values()) {
+    var avg = (pixel.getRed() + pixel.getGreen() + pixel.getBlue()) / 3;
+    pixel.setRed(avg);
+    pixel.setGreen(avg);
+    pixel.setBlue(avg);
+  }
+}
+
+
+
+
+function dogreen() {
+  if (imageIsLoaded(greenImage)) {
+    filterGreen();
+    greenImage.drawTo(canvas);
+  }
+}
+
+function filterGreen() {
+  for (var pixel of greenImage.values()) {
+    var avg = (pixel.getRed() + pixel.getGreen() + pixel.getBlue()) / 3;
+    pixel.setRed(0);
+    pixel.setGreen(avg);
+    pixel.setBlue(0);
+  }
+}
+
+
+function doblue(){
+  if (imageIsLoaded(blueImage)){
+    filterblue();
+    blueImage.drawTo(canvas);
+  }
+}
+
+function filterblue(){
+  for (var pixel of blueImage.values()){
+    var avg = (pixel.getRed() + pixel.getGreen() + pixel.getBlue()) / 3;
+    pixel.setRed(0);
+    pixel.setGreen(avg);
+    pixel.setBlue(avg);
+  }
+}
+
+
+function doRed() {
+  if (imageIsLoaded(redImage)) {
+    filterRed();
+    redImage.drawTo(canvas);
+  }
+}
+
+function filterRed() {
+  for (var pixel of redImage.values()) {
+    var avg = (pixel.getRed() + pixel.getGreen() + pixel.getBlue()) / 3;
+    if (avg < 128) {
+      pixel.setRed(2 * avg);
+      pixel.setGreen(0);
+      pixel.setBlue(0);
+    } else {
+      pixel.setRed(255);
+      pixel.setGreen(2 * avg - 255);
+      pixel.setBlue(2 * avg - 255);
+    }
+  }
+}
+
+function reset() {
+  if (imageIsLoaded(originalImage)) {
+    originalImage.drawTo(canvas);
+    grayImage = new SimpleImage(originalImage);
+    redImage = new SimpleImage(originalImage);
+  }
+}
+
+function imageIsLoaded(img) {
+  if (img == null || !img.complete()) {
+    alert("Image not loaded");
+    return false;
+  } else {
+    return true;
+  }
+}
+</script>
